@@ -1,0 +1,77 @@
+{
+  "apiVersion": "vlabs",
+  "location": "dc2",
+  "properties": {
+    "orchestratorProfile": {
+      "orchestratorRelease": "1.28",
+      "orchestratorVersion": "1.28.15",
+      "kubernetesConfig": {
+        "cloudProviderBackoff": true,
+        "cloudProviderBackoffRetries": 1,
+        "cloudProviderBackoffDuration": 30,
+        "cloudProviderRateLimit": true,
+        "cloudProviderRateLimitQPS": 100,
+        "cloudProviderRateLimitBucket": 150,
+        "cloudProviderRateLimitQPSWrite": 25,
+        "cloudProviderRateLimitBucketWrite": 30,
+        "useCloudControllerManager": true,
+        "useInstanceMetadata": false,
+        "networkPlugin": "kubenet",
+        "kubeletConfig": {
+          "--node-status-update-frequency": "1m"
+        }
+      },
+      "serviceCidr": "10.240.0.0/16",
+      "dnsServiceIP": "10.240.0.10",
+      "controllerManagerConfig": {
+        "--node-monitor-grace-period": "5m",
+        "--pod-eviction-timeout": "5m",
+        "--route-reconciliation-period": "1m"
+      }
+    }
+  },
+
+"customCloudProfile": {
+    "portalURL": "https://portal.dc2.xpressazure",
+    "identitySystem": ""
+},
+"featureFlags": {
+    "enableTelemetry": true
+},
+"masterProfile": {
+    "dnsPrefix": "aks-cluster-sk",
+    "distro": "aks-ubuntu-20.04",
+    "count": 3,
+    "vmSize": "Standard_DS1_v2",
+    "vnetSubnetId": "/subscriptions/...",
+    "firstConsecutiveStaticIP": "10.0.1.240"
+  },
+  "agentPoolProfiles": [
+    {
+      "name": "linuxpool",
+      "count": 3,
+      "vmSize": "Standard_D1_v2",
+      "distro": "aks-ubuntu-20.04",
+      "availabilityProfile": "AvailabilitySet",
+      "AcceleratedNetworkingEnabled": false,
+      "vnetSubnetId": "/subscriptions/..."
+    }
+  ],
+  "linuxProfile": {
+    "adminUsername": "salmaksantini",
+    "ssh": {
+      "publicKeys": [
+        {
+          "keyData": "ssh-rsa #"
+        }
+      ]
+    },
+    "enableUnattendedUpgrades": false,
+    "runUnattendedUpgradesOnBootstrap": false
+  },
+  "servicePrincipalProfile": {
+    "clientId": "",
+    "secret": ""
+  }
+
+}

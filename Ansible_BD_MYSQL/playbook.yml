@@ -1,0 +1,56 @@
+- name: Configuration de l'environnement MySQL
+  hosts: all
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks: 
+    - name: Installer Python et pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Installer PyMySQL pour les modules MySQL d'Ansible
+      pip:
+        name: pymysql
+        state: present
+
+    - name: Installer MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+        update_cache: yes
+
+    - name: Démarrer et activer le service MySQL
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Configurer le mot de passe root de MySQL
+      mysql_user:
+        name: root
+        host: "%"
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+
+    - name: Créer une base de données
+      mysql_db:
+        name: "{{ mysql_database }}"
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+
+    - name: Créer un utilisateur MySQL
+      mysql_user:
+        name: "{{ mysql_user_name }}"
+        password: "{{ mysql_user_password }}"
+        priv: "{{ mysql_database }}:ALL"
+        host: "%"
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
